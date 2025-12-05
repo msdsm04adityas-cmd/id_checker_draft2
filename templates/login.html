@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login | GUIDONA</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body class="login-bg">
+
+<div class="login-container">
+
+    <div class="login-card">
+
+        <h2 class="login-title">GUIDONA LOGIN</h2>
+        <p class="login-sub">Secure access to ID Validation System</p>
+
+        <form action="/login" method="post">
+
+            <label class="login-label">Username</label>
+            <input type="text" name="username" class="login-input" placeholder="Enter username" required>
+
+            <label class="login-label">Password</label>
+            <input type="password" name="password" class="login-input" placeholder="Enter password" required>
+
+            <button type="submit" class="login-btn">Login</button>
+
+            {% if error %}
+            <p class="login-error">{{ error }}</p>
+            {% endif %}
+
+        </form>
+
+    </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ID Checker • Blue-Teal UI</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<h1 class="guidona-heading">GUIDONA ID VALIDATION</h1>
+
+<div class="container">
+
+    <!-- LEFT SIDE: UPLOAD + PREVIEW -->
+    <div class="left">
+        <div class="card">
+
+            <h2 class="left-title">UPLOAD DOCUMENT</h2>
+
+            <form id="uploadForm" action="/dashboard/upload" method="post" enctype="multipart/form-data">
+
+                <div class="upload-container">
+                    <label class="upload-box" id="uploadLabel">
+                        Click to Upload Document  
+                        <input type="file" id="fileInput" name="file" accept="image/*" required style="display:none">
+                    </label>
+                </div>
+
+                <div class="preview-wrapper">
+                    <img id="preview" class="preview-img">
+                </div>
+
+                <button id="submitBtn" type="submit">
+                    PROCESS DOCUMENT
+                </button>
+
+            </form>
+
+        </div>
+    </div>
+
+    <!-- RIGHT SIDE: DETAILS PANEL -->
+    <div class="right">
+        <div class="card">
+
+            <h2 class="right-title">EXTRACTED DETAILS</h2>
+
+            {% if result %}
+
+                {% if result.fields_status == "not_detected" %}
+                    <div class="warning-card">
+                        <div class="warning-icon">❌</div>
+                        <div>No details detected! Please upload a clearer document.</div>
+                    </div>
+
+                {% else %}
+                    <table class="details-table">
+                        <thead>
+                            <tr>
+                                <th>Field</th>
+                                <th>Value</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <!-- DOC TYPE -->
+                            <tr>
+                                <td><b>Document Type</b></td>
+                                <td>{{ result.document_type.replace('_',' ').title() }}</td>
+                            </tr>
+
+                            <!-- CLEAN FIELD MAPPINGS -->
+                            {% for key, val in result.fields.items() %}
+                            <tr>
+                                <td>
+                                    {{
+                                        key
+                                            .replace('_',' ')
+                                            .replace('Aadhaar ', '')
+                                            .replace('Pan ', '')
+                                            .replace('Voter ', '')
+                                            .replace('Dl ', '')
+                                            .replace('Driving License ', '')
+                                            .title()
+                                    }}
+                                </td>
+                                <td>{{ val }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+
+                    </table>
+                {% endif %}
+
+            {% else %}
+                <div style="color:#777;">Upload a document to extract details.</div>
+            {% endif %}
+
+        </div>
+    </div>
+
+
+</div>
+
+<script>
+    const fileInput = document.getElementById("fileInput");
+    const preview = document.getElementById("preview");
+    const submitBtn = document.getElementById("submitBtn");
+    const uploadLabel = document.getElementById("uploadLabel");
+
+    fileInput.onchange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            preview.src = URL.createObjectURL(file);
+            preview.style.display = "block";
+            submitBtn.style.display = "block";
+            uploadLabel.style.display = "none";
+        }
+    };
+</script>
+
+</body>
+</html>

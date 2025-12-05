@@ -1,0 +1,19 @@
+# Dataset for YOLO Detector Validation
+path: test_images
+
+train: .
+val: .
+
+names:
+  0: Aadhaar_Number
+  1: Aadhaar_Name
+  2: Aadhaar_DOB
+  3: Aadhaar_Gender
+  4: PAN_Number
+  5: PAN_Name
+  6: PAN_Father
+  7: PAN_DOB
+  8: DL_Number
+  9: DL_Name
+  10: DL_DOB
+  11: DL_Address

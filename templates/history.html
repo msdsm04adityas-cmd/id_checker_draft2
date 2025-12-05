@@ -1,0 +1,23 @@
+<h1 class="guidona-heading">DOCUMENT HISTORY</h1>
+
+<table class="details-table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Document Type</th>
+            <th>Status</th>
+            <th>Date</th>
+        </tr>
+    </thead>
+
+    <tbody>
+    {% for doc in docs %}
+        <tr>
+            <td>{{ doc.id }}</td>
+            <td>{{ doc.doc_type }}</td>
+            <td>{{ doc.fields_status }}</td>
+            <td>{{ doc.created_at }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
