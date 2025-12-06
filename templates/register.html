@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Account</title>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            /* SAME BLUE–TEAL GRADIENT AS LOGIN PAGE */
+            background: linear-gradient(135deg, #0f8f83, #0ebac7);
+            
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .card {
+            width: 430px;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.16);
+            backdrop-filter: blur(18px);
+            border-radius: 18px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.18);
+            text-align: center;
+        }
+
+        h2 {
+            font-size: 26px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #ffffff;
+            letter-spacing: 1px;
+        }
+
+        p.subtext {
+            color: #e8f8f8;
+            margin-bottom: 28px;
+            font-size: 14px;
+        }
+
+        .form-label {
+            text-align: left;
+            width: 100%;
+            display: block;
+            font-size: 15px;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 6px;
+        }
+
+        .input-box {
+            width: 100%;
+            padding: 13px;
+            border-radius: 10px;
+            border: none;
+            outline: none;
+            background: rgba(255, 255, 255, 0.88);
+            margin-bottom: 18px;
+            font-size: 15px;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 14px;
+            border-radius: 25px;
+            border: none;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+
+            background: linear-gradient(to right, #0d7f74, #11bfa6);
+            color: white;
+
+            transition: all 0.25s ease-in-out;
+        }
+
+        .btn:hover {
+            background: linear-gradient(to right, #0a635b, #0ea18c);
+            transform: scale(1.03);
+        }
+
+        .error {
+            color: #ff3838;
+            margin-bottom: 12px;
+            font-weight: bold;
+        }
+
+        .login-link {
+            margin-top: 18px;
+            display: block;
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .login-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="card">
+    <h2>Create Account</h2>
+    <p class="subtext">Register to access the ID Validation Dashboard</p>
+
+    {% if error %}
+    <div class="error">{{ error }}</div>
+    {% endif %}
+
+    <form method="post">
+        <label class="form-label">Username</label>
+        <input class="input-box" type="text" name="username" placeholder="Enter username" required>
+
+        <label class="form-label">Password</label>
+        <input class="input-box" type="password" name="password" placeholder="Enter password" required>
+
+        <button class="btn" type="submit">Create Account</button>
+    </form>
+
+    <a href="/login" class="login-link">Already have an account? Login</a>
+</div>
+
+</body>
+</html>

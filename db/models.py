@@ -14,6 +14,7 @@ class User(Base):
     created_at = Column(TIMESTAMP, server_default=func.now())
 
 
+
 class Document(Base):
     __tablename__ = "documents"
 
@@ -23,6 +24,7 @@ class Document(Base):
     processed_image_path = Column(Text)
     doc_type = Column(String(50))
     fields_status = Column(String(20))
+    image_hash = Column(String(64), unique=True)   # NEW
     created_at = Column(TIMESTAMP, server_default=func.now())
 
     fields = relationship("ExtractedField", back_populates="document")

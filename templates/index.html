@@ -3,14 +3,76 @@
 <head>
     <title>ID Checker • Blue-Teal UI</title>
     <link rel="stylesheet" href="/static/style.css">
+
+    <style>
+        /* Clear All Button (Right Panel) */
+        .clear-all-wrapper {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+        }
+
+        .clear-all-btn {
+            background: linear-gradient(135deg, #ff6b6b, #d64545);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            font-size: 18px;
+            font-weight: bold;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 3px 10px rgba(255, 0, 0, 0.35);
+            transition: 0.25s;
+        }
+
+        .clear-all-btn:hover {
+            background: #d93636;
+            transform: scale(1.15);
+        }
+
+        /* Clear Image Button (Left Panel) */
+        .clear-img-btn {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background: linear-gradient(135deg, #ff6b6b, #d64545);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 28px;
+            height: 28px;
+            font-size: 16px;
+            cursor: pointer;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 3px 8px rgba(255, 0, 0, 0.35);
+            transition: 0.25s ease;
+        }
+
+        .clear-img-btn:hover {
+            background: #d93636;
+            transform: scale(1.12);
+        }
+
+        .preview-wrapper {
+            position: relative;
+            margin-top: 10px;
+        }
+    </style>
 </head>
+
 <body>
 
 <h1 class="guidona-heading">GUIDONA ID VALIDATION</h1>
 
 <div class="container">
 
-    <!-- LEFT SIDE: UPLOAD + PREVIEW -->
+    <!-- LEFT SIDE (UPLOAD) -->
     <div class="left">
         <div class="card">
 
@@ -20,13 +82,17 @@
 
                 <div class="upload-container">
                     <label class="upload-box" id="uploadLabel">
-                        Click to Upload Document  
+                        Click to Upload Document
                         <input type="file" id="fileInput" name="file" accept="image/*" required style="display:none">
                     </label>
                 </div>
 
+                <!-- IMAGE PREVIEW -->
                 <div class="preview-wrapper">
                     <img id="preview" class="preview-img">
+
+                    <!-- CLEAR IMAGE BUTTON -->
+                    <button type="button" id="clearImageBtn" class="clear-img-btn">×</button>
                 </div>
 
                 <button id="submitBtn" type="submit">
@@ -38,11 +104,18 @@
         </div>
     </div>
 
-    <!-- RIGHT SIDE: DETAILS PANEL -->
+
+
+    <!-- RIGHT SIDE (EXTRACTED DETAILS) -->
     <div class="right">
-        <div class="card">
+        <div class="card" style="position:relative;">
 
             <h2 class="right-title">EXTRACTED DETAILS</h2>
+
+            <!-- ⭐ SINGLE FINAL CLEAR-ALL BUTTON ⭐ -->
+            <form action="/dashboard/clear-all" method="post" class="clear-all-wrapper">
+                <button class="clear-all-btn">×</button>
+            </form>
 
             {% if result %}
 
@@ -62,26 +135,23 @@
                         </thead>
 
                         <tbody>
-                            <!-- DOC TYPE -->
                             <tr>
                                 <td><b>Document Type</b></td>
                                 <td>{{ result.document_type.replace('_',' ').title() }}</td>
                             </tr>
 
-                            <!-- CLEAN FIELD MAPPINGS -->
                             {% for key, val in result.fields.items() %}
                             <tr>
                                 <td>
-                                    {{
-                                        key
-                                            .replace('_',' ')
-                                            .replace('Aadhaar ', '')
-                                            .replace('Pan ', '')
-                                            .replace('Voter ', '')
-                                            .replace('Dl ', '')
-                                            .replace('Driving License ', '')
-                                            .title()
-                                    }}
+                                {{
+                                    key.replace('_',' ')
+                                       .replace('Aadhaar ', '')
+                                       .replace('Pan ', '')
+                                       .replace('Voter ', '')
+                                       .replace('Dl ', '')
+                                       .replace('Driving License ', '')
+                                       .title()
+                                }}
                                 </td>
                                 <td>{{ val }}</td>
                             </tr>
@@ -98,15 +168,19 @@
         </div>
     </div>
 
-
 </div>
 
+
+
+<!-- JAVASCRIPT -->
 <script>
     const fileInput = document.getElementById("fileInput");
     const preview = document.getElementById("preview");
     const submitBtn = document.getElementById("submitBtn");
     const uploadLabel = document.getElementById("uploadLabel");
+    const clearImageBtn = document.getElementById("clearImageBtn");
 
+    // Show preview when selecting file
     fileInput.onchange = (e) => {
         const file = e.target.files[0];
         if (file) {
@@ -114,7 +188,19 @@
             preview.style.display = "block";
             submitBtn.style.display = "block";
             uploadLabel.style.display = "none";
+            clearImageBtn.style.display = "flex";
         }
+    };
+
+    // Clear uploaded image
+    clearImageBtn.onclick = (e) => {
+        e.preventDefault();
+        preview.src = "";
+        preview.style.display = "none";
+        clearImageBtn.style.display = "none";
+        fileInput.value = "";
+        uploadLabel.style.display = "block";
+        submitBtn.style.display = "none";
     };
 </script>
 

@@ -5,3 +5,5 @@ db = SessionLocal()
 crud.create_user(db, "admin", "admin123")
 
 print("Admin user created: admin / admin123")
+
+

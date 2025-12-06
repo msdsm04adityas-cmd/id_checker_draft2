@@ -10,6 +10,41 @@ router = APIRouter()
 
 
 # ---------------------------------------------
+# REGISTER PAGE (GET)
+# ---------------------------------------------
+@router.get("/register", response_class=HTMLResponse)
+async def register_page(request: Request):
+    return templates.TemplateResponse("register.html", {"request": request})
+
+
+# ---------------------------------------------
+# REGISTER PROCESS (POST)
+# ---------------------------------------------
+@router.post("/register")
+async def register(
+    request: Request,
+    username: str = Form(...),
+    password: str = Form(...)
+):
+    db = SessionLocal()
+
+    # Check duplicate username
+    existing = crud.get_user_by_username(db, username)
+    if existing:
+        return templates.TemplateResponse(
+            "register.html",
+            {"request": request, "error": "Username already exists!"}
+        )
+
+    # Create user
+    crud.create_user(db, username, password)
+
+    # -------- NO AUTO LOGIN --------
+    # Send user to login screen
+    return RedirectResponse("/login", status_code=302)
+
+
+# ---------------------------------------------
 # LOGIN PAGE (GET)
 # ---------------------------------------------
 @router.get("/login", response_class=HTMLResponse)

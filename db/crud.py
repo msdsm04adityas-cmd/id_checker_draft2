@@ -23,18 +23,23 @@ def authenticate(db: Session, username: str, password: str):
 
 
 # -------- DOCUMENT UPLOAD SAVE --------
-def save_document(db: Session, user_id, original, processed, doc_type, fields_status):
+def save_document(db: Session, user_id, original, processed, doc_type, fields_status, image_hash):
     doc = Document(
         user_id=user_id,
         original_image_path=original,
         processed_image_path=processed,
         doc_type=doc_type,
-        fields_status=fields_status
+        fields_status=fields_status,
+        image_hash=image_hash
     )
     db.add(doc)
     db.commit()
     db.refresh(doc)
     return doc
+
+# -------- DUPLICATE DOCUMENT CHECK --------
+def get_document_by_hash(db: Session, image_hash: str):
+    return db.query(Document).filter(Document.image_hash == image_hash).first()
 
 
 # -------- FIELDS SAVE --------
@@ -56,3 +61,6 @@ def get_all_documents(db: Session):
 
 def get_fields_for_document(db: Session, doc_id: int):
     return db.query(ExtractedField).filter(ExtractedField.document_id == doc_id).all()
+
+def get_user_by_username(db: Session, username: str):
+    return db.query(User).filter(User.username == username).first()

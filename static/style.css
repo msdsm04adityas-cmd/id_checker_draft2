@@ -1,13 +1,53 @@
+/* ===================== GLOBAL STYLES ===================== */
+
 body {
     color: #00796b;
     font-family: 'Segoe UI', sans-serif;
-    background: url('/static/images/green_texture.jpg');
+    background: linear-gradient(135deg, #00796b, #009688, #26c6da);
     background-size: cover;
-    background-position: center;
     background-attachment: fixed;
     margin: 0;
     padding: 0;
 }
+
+.guidona-heading {
+    text-align: center;
+    font-size: 35px;
+    font-weight: 900;
+    color: white;
+    letter-spacing: 1.6px;
+    margin-top: 20px;
+}
+
+
+/* ===================== PAGE LAYOUT ===================== */
+
+.container {
+    display: flex;
+    gap: 25px;
+    padding: 20px 40px;
+}
+
+.left, .right {
+    flex: 1;
+    display: flex;
+}
+
+.card {
+    background: rgba(255, 255, 255, 0.90);
+    backdrop-filter: blur(6px);
+    padding: 25px;
+    border-radius: 18px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    width: 100%;
+    min-height: 550px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+
+/* ===================== LEFT PANEL — UPLOAD ===================== */
 
 .left-title {
     text-align: center;
@@ -18,128 +58,170 @@ body {
     letter-spacing: 1px;
 }
 
-.right-title {
-    text-align: center;
-    font-size: 24px;
-    font-weight: 900;
-    color: #00695c;
-    margin-bottom: 15px;
-    letter-spacing: 1.5px;
-}
-
-.container {
-    display: flex;
-    gap: 25px;
-    padding: 10px 30px;
-}
-
-/* SAME SIZE PANELS */
-.left, .right {
-    flex: 1;
-    display: flex;
-}
-
-.card {
-    background: rgba(255, 255, 255, 0.90); /* light white for readability */
-    backdrop-filter: blur(3px);           /* slight glass effect */
-    padding: 25px;
-    border-radius: 14px;
-    box-shadow: 0 6px 18px rgba(0,0,0,0.15);
-    width: 100%;
-    min-height: 550px;
-    display: flex;
-    flex-direction: column;
-}
-
-
-/* Upload + Preview Container */
 .upload-container {
-    flex: 0 0 250px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
 }
 
-/* Upload Box */
 .upload-box {
-    border: 2px dashed #009688;
+    border: 2px dashed #00a896;
     padding: 30px;
     text-align: center;
-    color: #00796b;
+    color: #005f56;
     font-size: 18px;
     width: 280px;
-    border-radius: 12px;
+    border-radius: 14px;
     cursor: pointer;
+    transition: 0.25s ease;
 }
 
-/* IMAGE PREVIEW FIXED + CENTER */
+.upload-box:hover {
+    background: rgba(0, 150, 136, 0.10);
+}
+
+
+/* ===================== IMAGE PREVIEW ===================== */
+
 .preview-wrapper {
     width: 100%;
     height: 260px;
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: 10px;
+    margin-top: 12px;
+    position: relative;
 }
 
 .preview-img {
     max-width: 300px;
     max-height: 240px;
     object-fit: contain;
-    border-radius: 12px;
-    border: 1px solid #bbb;
+    border-radius: 14px;
+    border: 1px solid #a7bcb9;
     display: none;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.12);
 }
 
-/* BIG PROFESSIONAL BUTTON */
+
+/* ===================== CLEAR IMAGE BUTTON ===================== */
+
+.clear-img-btn {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+
+    background: linear-gradient(135deg, #ff6b6b, #d64545);
+    color: white;
+
+    border: none;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+
+    font-size: 18px;
+    font-weight: 700;
+
+    display: none;
+    justify-content: center;
+    align-items: center;
+
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(255, 0, 0, 0.35);
+    transition: 0.25s;
+}
+
+.clear-img-btn:hover {
+    background: linear-gradient(135deg, #e63946, #c62828);
+    transform: scale(1.15);
+}
+
+
+/* ===================== PROCESS DOCUMENT BUTTON ===================== */
+
 #submitBtn {
     margin: 20px auto;
     padding: 14px 28px;
-    background: linear-gradient(90deg, #009688, #00bfa5);
+
+    background: linear-gradient(90deg, #00a896, #02c39a);
     color: white;
+
     border: none;
     border-radius: 50px;
     font-size: 17px;
     font-weight: 600;
+
     cursor: pointer;
     display: none;
-    box-shadow: 0px 4px 10px rgba(0,150,136,0.3);
+
+    box-shadow: 0px 4px 12px rgba(0,150,136,0.3);
     transition: 0.25s ease;
 }
 
 #submitBtn:hover {
-    background: linear-gradient(90deg, #00796b, #00a08a);
-    transform: translateY(-2px);
+    background: linear-gradient(90deg, #028090, #00b4a0);
+    transform: translateY(-3px);
 }
 
-.preview-img {
-    margin-top: 20px;
-    width: 100%;
-    border-radius: 10px;
-    border: 1px solid #ddd;
 
+/* ===================== RIGHT PANEL — EXTRACTED DETAILS ===================== */
 
+.right-title {
+    text-align: center;
+    font-size: 24px;
+    font-weight: 900;
+    color: #00695c;
+    margin-bottom: 20px;
+    letter-spacing: 1.4px;
 }
 
-/* DETAILS TABLE */
-.details-title {
-    font-size: 22px;
+
+/* ===================== CLEAR ALL (X) BUTTON ===================== */
+
+.clear-all-btn {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+
+    background: linear-gradient(135deg, #ff6b6b, #d64545);
+    color: white;
+
+    border: none;
+    border-radius: 50%;
+    width: 34px;
+    height: 34px;
+
+    font-size: 20px;
     font-weight: 700;
-    color: #00796b;
-    margin-bottom: 15px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(255, 0, 0, 0.4);
+    transition: 0.25s ease-in-out;
 }
+
+.clear-all-btn:hover {
+    background: linear-gradient(135deg, #e63946, #c62828);
+    transform: scale(1.18);
+}
+
+
+/* ===================== DETAILS TABLE ===================== */
 
 .details-table {
     width: 100%;
     border-collapse: collapse;
     background: white;
-    border-radius: 12px;
+    border-radius: 14px;
     overflow: hidden;
 }
 
 .details-table th {
-    background: #0097a7;
+    background: #00a8b5;
     color: white;
     padding: 12px;
     text-align: left;
@@ -147,7 +229,7 @@ body {
 
 .details-table td {
     padding: 10px;
-    border-bottom: 1px solid #e0f2f1;
+    border-bottom: 1px solid #cfecec;
     color: #004d40;
 }
 
@@ -156,19 +238,11 @@ body {
 }
 
 
-.guidona-title {
-    text-align: center;
-    font-size: 34px;
-    font-weight: 900;
-    color: #000;
-    margin-top: 25px;
-    margin-bottom: 20px;
-    letter-spacing: 1.8px;
-}
+/* ===================== WARNING CARD ===================== */
 
 .warning-card {
     background: #ffebee;
-    border-left: 6px solid #d32f2f;
+    border-left: 6px solid #e63946;
     padding: 18px;
     border-radius: 10px;
     color: #c62828;
@@ -185,7 +259,9 @@ body {
     font-size: 22px;
 }
 
-/* =============== LOGIN PAGE BACKGROUND ================== */
+
+/* ===================== LOGIN PAGE ===================== */
+
 .login-bg {
     background: linear-gradient(135deg, #00796b, #009688, #26c6da);
     height: 100vh;
@@ -194,11 +270,10 @@ body {
     align-items: center;
 }
 
-/* =============== LOGIN CARD ================== */
 .login-container {
-    width: 100%;
     display: flex;
     justify-content: center;
+    width: 100%;
 }
 
 .login-card {
@@ -209,33 +284,23 @@ body {
     border-radius: 18px;
     box-shadow: 0 8px 25px rgba(0,0,0,0.25);
     text-align: center;
-    color: white;
     border: 1px solid rgba(255,255,255,0.3);
 }
 
-/* =============== LOGIN TITLE ================== */
 .login-title {
     font-size: 28px;
     font-weight: 800;
     margin-bottom: 8px;
-    color: #ffffff;
+    color: white;
     letter-spacing: 1.2px;
 }
 
-.login-sub {
-    font-size: 14px;
-    margin-bottom: 25px;
-    opacity: 0.9;
-}
-
-/* =============== INPUT STYLES ================== */
 .login-label {
     font-size: 15px;
-    color: #ffffff;
+    color: white;
+    margin-bottom: 6px;
     text-align: left;
     display: block;
-    margin-bottom: 6px;
-    margin-top: 12px;
 }
 
 .login-input {
@@ -243,13 +308,10 @@ body {
     padding: 12px;
     border-radius: 10px;
     border: none;
-    outline: none;
     margin-bottom: 10px;
-    font-size: 15px;
     background: rgba(255,255,255,0.75);
 }
 
-/* =============== LOGIN BUTTON ================== */
 .login-btn {
     width: 100%;
     padding: 12px;
@@ -261,21 +323,18 @@ body {
     border-radius: 50px;
     cursor: pointer;
     color: white;
-    box-shadow: 0px 4px 10px rgba(0,150,136,0.5);
     transition: 0.25s;
 }
 
 .login-btn:hover {
     background: linear-gradient(90deg,#004d40,#00a089);
-    transform: translateY(-2px);
+    transform: translateY(-3px);
 }
 
-/* =============== ERROR MESSAGE ================== */
 .login-error {
-    color: #ffebee;
+    color: white;
     background: #d32f2f;
     padding: 8px;
     border-radius: 6px;
     margin-top: 12px;
 }
-

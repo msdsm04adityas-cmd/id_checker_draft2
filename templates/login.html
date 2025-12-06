@@ -4,7 +4,13 @@
     <title>Login | GUIDONA</title>
     <link rel="stylesheet" href="/static/style.css">
 </head>
+
 <body class="login-bg">
+
+<!-- ⭐ TOP-RIGHT REGISTER BUTTON -->
+<div class="top-right-register">
+    <a href="/register" class="register-btn">Register</a>
+</div>
 
 <div class="login-container">
 
@@ -31,6 +37,31 @@
 
     </div>
 </div>
+
+<style>
+/* ⭐ Top-right register button styling */
+.top-right-register {
+    position: absolute;
+    top: 20px;
+    right: 25px;
+}
+
+.register-btn {
+    padding: 10px 22px;
+    background: white;
+    color: #0e7a84;
+    font-weight: 600;
+    border-radius: 25px;
+    text-decoration: none;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.15);
+    transition: 0.25s;
+}
+
+.register-btn:hover {
+    background: #e6ffff;
+    transform: scale(1.05);
+}
+</style>
 
 </body>
 </html>

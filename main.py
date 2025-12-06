@@ -2,6 +2,7 @@ import os
 import uuid
 import shutil
 import cv2
+import hashlib
 
 from fastapi import FastAPI, Request, UploadFile, File
 from fastapi.responses import HTMLResponse, RedirectResponse
@@ -10,14 +11,12 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 
 # DB IMPORTS
-from db.database import SessionLocal
+from db.database import SessionLocal, Base, engine
 from db import crud
-
-from db.database import Base, engine
 from db import models
 
+# Create Tables
 Base.metadata.create_all(bind=engine)
-
 
 # ML ENGINE
 from inference.inference_engine_y11 import run_inference
@@ -27,6 +26,14 @@ from auth.login import router as login_router
 
 # API ROUTES
 from api.predict import router as predict_router
+
+
+# ---------------------------------------------------------
+# IMAGE HASH FUNCTION (Duplicate Check)
+# ---------------------------------------------------------
+def get_image_hash(path):
+    with open(path, "rb") as f:
+        return hashlib.md5(f.read()).hexdigest()
 
 
 # ---------------------------------------------------------
@@ -61,6 +68,20 @@ app.include_router(login_router)
 app.include_router(predict_router, prefix="/api")
 
 
+# CLEAR EXTRACTED FIELDS
+@app.post("/dashboard/clear-fields")
+async def clear_fields(request: Request):
+    request.app.state.last_result = None
+    return RedirectResponse("/dashboard?refresh=1", status_code=302)
+
+
+# CLEAR PROCESSED IMAGE
+@app.post("/dashboard/clear-image")
+async def clear_image(request: Request):
+    request.app.state.last_image = None
+    return RedirectResponse("/dashboard?refresh=1", status_code=302)
+
+
 # ---------------------------------------------------------
 # DASHBOARD (GET)
 # ---------------------------------------------------------
@@ -80,6 +101,12 @@ async def dashboard(request: Request):
             "image_path": image_path
         }
     )
+
+@app.post("/dashboard/clear-all")
+async def clear_all(request: Request):
+    request.app.state.last_result = None
+    request.app.state.last_image = None
+    return RedirectResponse("/dashboard?refresh=1", status_code=302)
 
 
 # ---------------------------------------------------------
@@ -109,7 +136,28 @@ async def dashboard_upload(request: Request, file: UploadFile = File(...)):
     with open(file_path, "wb") as buffer:
         shutil.copyfileobj(file.file, buffer)
 
-    # Run ML inference
+    # ------------------------------------
+    # DUPLICATE DETECTION
+    # ------------------------------------
+    img_hash = get_image_hash(file_path)
+
+    existing_doc = crud.get_document_by_hash(db, img_hash)
+    if existing_doc:
+        print("DUPLICATE DOCUMENT — Using previous processed result")
+
+        # Load previous result
+        request.app.state.last_result = {
+            "document_type": existing_doc.doc_type,
+            "fields_status": existing_doc.fields_status,
+            "fields": {f.field_name: f.field_value for f in existing_doc.fields},
+        }
+        request.app.state.last_image = existing_doc.processed_image_path
+
+        return RedirectResponse("/dashboard?refresh=1", status_code=302)
+
+    # ------------------------------------
+    # RUN INFERENCE FOR NEW DOCUMENT
+    # ------------------------------------
     result = run_inference(file_path)
 
     # Draw bounding boxes
@@ -143,18 +191,18 @@ async def dashboard_upload(request: Request, file: UploadFile = File(...)):
         original=file_path,
         processed=boxed_path,
         doc_type=doc_type,
-        fields_status=status
+        fields_status=status,
+        image_hash=img_hash
     )
 
     # SAVE FIELDS
     crud.save_fields(db, doc.id, fields)
 
-    # Save in app state (for dashboard reload)
+    # Update dashboard state
     request.app.state.last_result = result
     request.app.state.last_image = boxed_path
 
-    # Redirect back to dashboard (refresh)
-    return RedirectResponse(url="/dashboard?refresh=1", status_code=302)
+    return RedirectResponse("/dashboard?refresh=1", status_code=302)
 
 
 # ---------------------------------------------------------
